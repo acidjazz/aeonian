@@ -8,15 +8,15 @@
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/acidjazz/aeonian/master/license)
 
 ### installation
-```
+```bash
 npm install aeonian
 ```
 or
-```
+```bash
 yarn add aeonian
 ```
 ###  usage
-```
+```javascript
 let ae = require('aeonian').config({
   bucket: {
     prefix: 'mysite-'
