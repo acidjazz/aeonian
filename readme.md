@@ -1,5 +1,5 @@
 
-aeonian
+æonian
 ========
 > still in early development
 
