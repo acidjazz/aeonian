@@ -1,24 +1,26 @@
-#!/usr/local/bin/node
-const ora = require('ora')
-const spinner = ora('Loading aeonian').start()
-const AWS = require('aws-sdk')
-AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: 'waa'})
-
-const s3 = new AWS.S3()
-const cloudfront = new AWS.CloudFront()
-const client = require('s3').createClient({ s3Client: new AWS.S3() })
-const yesno = require('yesno')
-const Progress = require('ascii-progress')
-
 let cfg = {
+  aws: {
+    profile: 'default'
+  },
   bucket: {
-    prefix: null
+    prefix: null,
+    localDir: './dist/',
   },
   coudfront: {
     staging: null,
     production: null,
   }
 }
+
+const ora = require('ora')
+const spinner = ora('Loading aeonian').start()
+const AWS = require('aws-sdk')
+
+const Progress = require('ascii-progress')
+
+var s3 = null
+var cloudfront = null
+var client = null
 
 var revision = require('child_process')
   .execSync('git rev-parse HEAD')
@@ -45,8 +47,13 @@ exports.config = (cfg) => {
     this.error('You need to specify a CloudFront Id for production; cloudfront { staging: \'E3EOPOZJSPE\' }')
   }
 
-  bucket = this.cfg.bucket.prefix + revision
-  domain = bucket + '.s3-website-us-east-1.amazonaws.com'
+  bucket = null
+  domain = null
+
+  AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: this.cfg.aws.profile})
+  s3 = new AWS.S3()
+  cloudfront = new AWS.CloudFront()
+  client = require('s3').createClient({ s3Client: new AWS.S3() })
 
   this.succeed()
 
@@ -72,30 +79,26 @@ exports.next = (next) => {
 
 exports.deploy = (environment) => {
 
+  bucket = this.cfg.bucket.prefix + revision + '-' + environment
+  domain = bucket + '.s3-website-us-east-1.amazonaws.com'
+
   if (['staging', 'production'].indexOf(environment) === -1) {
     this.error('Invalid environment passed: ' + environment)
     return false
   }
 
-  yesno.ask('⚠ Deploy ' + environment + ' with commit ' + revision + ' ? [yes/no]', true, (ok) => {
-    if (ok) {
-      this.listBuckets((buckets) => {
-        if (buckets.indexOf(bucket) !== -1) {
-          this.next('Bucket exists, removing')
-          this.info()
-          this.emptyBucket(bucket, () => {
-            this.deleteBucket(bucket, () => {
-              this.process(bucket, domain, environment)
-            })
-          })
-        } else {
-          this.process(bucket, domain, environment)
-        }
+  this.listBuckets((buckets) => {
+    if (buckets.indexOf(bucket) !== -1) {
+      this.next('Bucket exists, removing')
+      this.info()
+      this.destroyBucket(bucket, () => {
+        this.process(bucket, domain, environment)
       })
     } else {
-      console.log('aborting')
+      this.process(bucket, domain, environment)
     }
-  }, ['Yes'], ['No'])
+  })
+
 }
 
 exports.process = (bucket, domain, environment) => {
@@ -103,9 +106,11 @@ exports.process = (bucket, domain, environment) => {
     this.uploadToBucket(bucket, () => {
       this.makeBucketWebsite(bucket, () => {
         this.updateCloudFrontOrigin(this.cfg.cloudfront[environment], domain, environment, () => {
-          this.next('All operations complete')
-          this.succeed()
-          process.exit()
+          this.invalidate(environment, this.cfg.cloudfront[environment], () => {
+            this.next('All operations complete')
+            this.succeed()
+            process.exit()
+          })
         })
       })
     })
@@ -122,6 +127,14 @@ exports.listBuckets = (complete) => {
       buckets.push(data.Buckets[key].Name)
     }
     complete(buckets)
+  })
+}
+
+exports.destroyBucket = (bucket, complete) => {
+  this.emptyBucket(bucket, () => {
+    this.deleteBucket(bucket, () => {
+      complete()
+    })
   })
 }
 
@@ -159,10 +172,9 @@ exports.createBucket = (bucket, complete) => {
 }
 
 exports.uploadToBucket = (bucket, complete) => {
-  this.next('Uploading to bucket: ' + bucket)
-  this.info()
+  this.next('00.00% Uploading to bucket: ' + bucket)
   let params = {
-    localDir: "./dist/",
+    localDir: this.cfg.bucket.localDir,
     deleteRemoved: true,
     s3Params: {
       Bucket: bucket,
@@ -172,38 +184,24 @@ exports.uploadToBucket = (bucket, complete) => {
 
   let uploader = client.uploadDir(params)
   uploader.on('error', (error) => {
-    console.log('unable to sync:', error.stack)
+    this.error('unable to sync:', error.stack)
   })
 
-  let bar = false
   uploader.on('progress', () => {
-
     if (!isNaN(uploader.progressAmount / uploader.progressTotal)) {
-
-      let done = (uploader.progressAmount / uploader.progressTotal).toFixed(2)
-
-      if (bar === false) {
-
-        bar = new Progress({
-          schema: '[:bar.gradient(blue, green)] :percent.cyan :elapseds.blue :etas.green',
-          total: 100,
-        })
-      }
-
-      bar.update(done)
+      let done = (uploader.progressAmount / uploader.progressTotal * 100).toFixed(2)
+      spinner.text = done + '% Uploading to bucket: ' + bucket
     }
-
   })
 
   uploader.on('end', () => {
-    bar.clear()
     complete()
   })
 
 }
 
 exports.makeBucketWebsite = (bucket, complete) => {
-  this.next('Making bucket a website: ' + bucket)
+  this.next('Websiteing bucket: ' + bucket)
 
   s3.putBucketWebsite({
     Bucket: bucket,
@@ -227,28 +225,67 @@ exports.makeBucketWebsite = (bucket, complete) => {
 
 exports.updateCloudFrontOrigin = (id, domain, environment, complete) => {
 
+  let updated = false
+
   this.next('Getting ' + environment + ' CloudFront Config with id: ' + id)
   cloudfront.getDistributionConfig({Id: id}, (error, data) => {
     if (error) {
       this.error('cf.getDistributionConfig Error ' +  error)
     } else {
-      this.succeed()
-      let updateParams = data
-      updateParams.Id = id
-      updateParams.IfMatch = updateParams.ETag
-      delete updateParams.ETag
-      let previous = updateParams.Origins.Items[0].DomainName
-      updateParams.Origins.Items[0].DomainName = domain
-      cloudfront.updateDistribution(updateParams, (terror, tdata) => {
-        this.next('Updating ' + environment + ' CloudFront Origin with domain: ' + domain)
-        if (terror) {
-          this.error('cf.updateDistribution Error' +  terror)
-        } else {
-          this.succeed()
-          complete()
-        }
-      })
+      if (updated === false) {
+        updated = true
+        this.succeed()
+        let updateParams = data
+        updateParams.Id = id
+        updateParams.IfMatch = updateParams.ETag
+        delete updateParams.ETag
+
+        let previous = updateParams.Origins.Items[0].DomainName.replace('.s3-website-us-east-1.amazonaws.com', '')
+        let current = domain.replace('s3-website-us-east-1.amazonaws.com', '')
+
+        updateParams.Origins.Items[0].DomainName = domain
+        cloudfront.updateDistribution(updateParams, (terror, tdata) => {
+          this.next('Updating ' + environment + ' CloudFront Origin with domain: ' + domain)
+          if (terror) {
+            this.error('cf.updateDistribution Error' +  terror)
+          } else {
+            this.succeed()
+            if (current !== previous) {
+              this.next('Destroying previous bucket: ' + previous)
+              this.destroyBucket(previous, () => {
+                this.succeed()
+                complete()
+              })
+            } else {
+              this.next('Previous bucket was the same, leaving it alone')
+              this.succeed()
+              complete()
+            }
+          }
+        })
+      }
     }
   })
 }
 
+exports.invalidate = (environment, Id, complete) => {
+  this.next('Creating Invalidation for ' + environment + ' (Id: ' + Id + ')')
+  let params = {
+    DistributionId: Id,
+    InvalidationBatch: {
+      CallerReference: new Date().valueOf().toString(),
+      Paths: {
+        Quantity: 1,
+        Items: ['/*']
+      }
+    }
+  }
+  cloudfront.createInvalidation(params, (error, data) => {
+    if (error) {
+      this.error('cloudfront.createInvalidation() Error: ' + error)
+    } else {
+      this.succeed()
+      complete()
+    }
+  })
+}
