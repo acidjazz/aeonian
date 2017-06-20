@@ -22,7 +22,7 @@ let ae = require('aeonian').config({
     localDir: './dist/',
     prefix: 'mysite-'
   },
-  cloudfront: {
+  environments: {
     staging: 'CLOUDFRONT_ID',
     production: 'CLOUDFRONT_ID',
   }

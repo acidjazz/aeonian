@@ -3,13 +3,9 @@ let cfg = {
     profile: 'default'
   },
   bucket: {
-    prefix: null,
     localDir: './dist/',
+    prefix: null
   },
-  coudfront: {
-    staging: null,
-    production: null,
-  }
 }
 
 const ora = require('ora')
@@ -23,7 +19,7 @@ var cloudfront = null
 var client = null
 
 var revision = require('child_process')
-  .execSync('git rev-parse HEAD')
+  .execSync('git rev-parse --short HEAD')
   .toString().trim()
 
 var bucket = null
@@ -40,12 +36,6 @@ exports.config = (cfg) => {
   if (this.cfg.bucket.prefix === null) {
     this.error('You need to specify a bucket prefix; bucket: { prefix: \'myproj-\' }')
   }
-  if (this.cfg.cloudfront.staging === null) {
-    this.error('You need to specify a CloudFront Id for staging; cloudfront { staging: \'E3EOPOZJSPE\' }')
-  }
-  if (this.cfg.cloudfront.production === null) {
-    this.error('You need to specify a CloudFront Id for production; cloudfront { staging: \'E3EOPOZJSPE\' }')
-  }
 
   bucket = null
   domain = null
@@ -58,34 +48,16 @@ exports.config = (cfg) => {
   this.succeed()
 
   return this
-
-}
-
-exports.error = (message) => {
-  spinner.fail(message)
-  process.exit()
-}
-
-exports.succeed = () => {
-  spinner.succeed()
-}
-exports.info = () => {
-  spinner.info()
-}
-exports.next = (next) => {
-  spinner.text = next
-  spinner.start()
 }
 
 exports.deploy = (environment) => {
 
+  if (!(environment in this.cfg.environments)) {
+    this.error('Environment "' + environment + '" was not found in the config you passed')
+  }
+
   bucket = this.cfg.bucket.prefix + revision + '-' + environment
   domain = bucket + '.s3-website-us-east-1.amazonaws.com'
-
-  if (['staging', 'production'].indexOf(environment) === -1) {
-    this.error('Invalid environment passed: ' + environment)
-    return false
-  }
 
   this.listBuckets((buckets) => {
     if (buckets.indexOf(bucket) !== -1) {
@@ -105,8 +77,8 @@ exports.process = (bucket, domain, environment) => {
   this.createBucket(bucket, () => {
     this.uploadToBucket(bucket, () => {
       this.makeBucketWebsite(bucket, () => {
-        this.updateCloudFrontOrigin(this.cfg.cloudfront[environment], domain, environment, () => {
-          this.invalidate(environment, this.cfg.cloudfront[environment], () => {
+        this.updateCloudFrontOrigin(this.cfg.environments[environment], domain, environment, () => {
+          this.invalidate(environment, this.cfg.environments[environment], () => {
             this.next('All operations complete')
             this.succeed()
             process.exit()
@@ -115,6 +87,17 @@ exports.process = (bucket, domain, environment) => {
       })
     })
   })
+}
+
+exports.error = (message) => {
+  spinner.fail(message)
+  process.exit()
+}
+exports.succeed = () => { spinner.succeed() }
+exports.info = () => { spinner.info() }
+exports.next = (next) => {
+  spinner.text = next
+  spinner.start()
 }
 
 exports.listBuckets = (complete) => {
