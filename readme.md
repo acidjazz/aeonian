@@ -19,6 +19,7 @@ yarn add aeonian
 ```javascript
 let ae = require('aeonian').config({
   bucket: {
+    localDir: './dist/',
     prefix: 'mysite-'
   },
   cloudfront: {
