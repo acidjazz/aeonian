@@ -10,6 +10,7 @@
 <p align="center">
  <img src="https://github.com/acidjazz/aeonian/raw/master/demo.gif" alt="Aeonian Demo"/>
 </p>
+
 ### installation
 ```bash
 npm install aeonian
