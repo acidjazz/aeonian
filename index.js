@@ -43,7 +43,7 @@ exports.config = (cfg) => {
   AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: this.cfg.aws.profile})
   s3 = new AWS.S3()
   cloudfront = new AWS.CloudFront()
-  client = require('s3').createClient({ s3Client: new AWS.S3() })
+  client = require('@faceleg/s3').createClient({ s3Client: new AWS.S3() })
 
   this.succeed()
 
@@ -224,7 +224,7 @@ exports.updateCloudFrontOrigin = (id, domain, environment, complete) => {
         delete updateParams.ETag
 
         let previous = updateParams.Origins.Items[0].DomainName.replace('.s3-website-us-east-1.amazonaws.com', '')
-        let current = domain.replace('s3-website-us-east-1.amazonaws.com', '')
+        let current = domain.replace('.s3-website-us-east-1.amazonaws.com', '')
 
         updateParams.Origins.Items[0].DomainName = domain
         cloudfront.updateDistribution(updateParams, (terror, tdata) => {
