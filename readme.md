@@ -10,7 +10,7 @@
 ![](media/plus.png)
 ![](media/cf.png)
 
-Get Continuous Deployment for your AWS S3 + CloudFront hosted site 
+### Get Continuous Deployment for your AWS S3 + CloudFront hosted site 
 ========
 > still in early development
 
