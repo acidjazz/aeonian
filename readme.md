@@ -24,14 +24,14 @@
 
 ###  what does this do? 
 1. Creates a new S3 bucket `{prefix}-{commit-hash}-{environment}` based on the current repo and config
-2. Upload the contents of a directory you specified as `localDir` 
-3. Configure this bucket as a static website 
+2. Upload the contents of a local directory you specified as `localDir` 
+3. Configure the newly created bucket as a static website 
 4. Change the origin of the CloudFront ID associated to point to our new bucket's website URL
 5. Initiate an invalidation on `*` making the Distribution pull the new bucket's content
 6. Delete the previous bucket that was assigned as the origin as to not leave a trail of buckets
 
 ### for example
-* Let's say you have a file `operations/staging.js` with the following
+Let's say you have a script `operations/staging.js` with the following
 ```javascript
 let ae = require('aeonian').config({
   bucket: {
@@ -46,10 +46,11 @@ let ae = require('aeonian').config({
 
 ae.deploy('staging')
 ```
-* Running this would  result in seeing
+Running this would  result in
 <p align="center">
  <img src="https://github.com/acidjazz/aeonian/raw/master/demo.gif" alt="Aeonian Demo"/>
 </p>
+Which would deploy your current S3+CF setup 
 
 ### installation
 
@@ -58,5 +59,28 @@ ae.deploy('staging')
 * Set the current environment variables to your AWS key and secret for the [AWS JS SDK](https://aws.amazon.com/sdk-for-node-js/)
   * `AWS_ACCESS_KEY_ID`
   * `AWS_SECRET_ACCESS_KEY`
-  * More details on this step can be found [here](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html)
+  * Other options on this step can be found [here](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html)
 
+### CircleCI Integration
+This is mostly why aeonian exists, to automatically deploy based on commits.  Based on the example above, lets say you have scripts `operations/staging.js` and `operations/production.js` in your repo.  you could then have the following to your `package.json`
+```json
+"scripts": {
+..
+  "staging": "node operations/staging.js",
+  "production": "node operations/production.js",
+..
+},
+```
+After setting your AWS credentials on CircleCi, you could add something like this to your `circle.yml`
+```yaml
+deployment:
+  staging:
+    branch: development
+    commands:
+      - npm run staging
+  production:
+    branch: master
+    commands:
+      - npm run production
+```
+Any commit/PR merge to development would deploy staging, and any commit/PR merge to master would deploy production
