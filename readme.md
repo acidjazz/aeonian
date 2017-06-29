@@ -3,7 +3,7 @@
 </p>
 
 ![](media/automate.png)
-<span> your </span>
+<span style="line-height: 128px;"> your </span>
 ![](media/s3.png)
 ![](media/plus.png)
 ![](media/cf.png)
