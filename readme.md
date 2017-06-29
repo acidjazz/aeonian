@@ -83,7 +83,8 @@ deployment:
     commands:
       - npm run production
 ```
-Any commit/PR merge to development would deploy staging, and any commit/PR merge to master would deploy production
+* Any commit/PR merge to the `development` branch would deploy the `staging` environment
+* Any commit/PR merge to the `master` branch would deploy the `production` environment
 
 ### TravisCI Integration
 Please submit a PR or an issue once you get this running, so I can add to this area
