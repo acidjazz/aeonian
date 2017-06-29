@@ -5,6 +5,7 @@
 ![](media/automate.png)
 <span> your </span>
 ![](media/s3.png)
+![](media/plus.png)
 ![](media/cf.png)
 
 
