@@ -3,16 +3,16 @@
 </p>
 
 # æonian
+Continuous Deployment for your AWS S3 + CloudFront setup
 
 <p align="center">
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/automate.png"/>
-  <p style="display: inline-block; line-height: 128px;"> your </p>
+  <span style="line-height: 128px;"> your </span>
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/s3.png"/>
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/plus.png"/>
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/cf.png"/>
 </p>
 
-### Get Continuous Deployment for your AWS S3 + CloudFront hosted site 
 ========
 > still in early development
 
