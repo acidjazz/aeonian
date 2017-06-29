@@ -22,9 +22,6 @@
 [![CircleCI](https://img.shields.io/circleci/project/github/acidjazz/aeonian.svg)](https://circleci.com/gh/acidajzz/aeonian/)
 [![Join the chat at https://gitter.im/aws-aeonian/Lobby](https://badges.gitter.im/aws-aeonian/Lobby.svg)](https://gitter.im/aws-aeonian/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-
-
-
 ###  what does this do? 
 1. Creates a new S3 bucket `{prefix}-{commit-hash}-{environment}` based on the current repo and config
 2. Upload the contents of a directory you specified as `localDir` 
@@ -57,15 +54,9 @@ ae.deploy('staging')
 ### installation
 
 * Install the aeonian package
-```bash
-npm install aeonian
-```
-or
-```bash
-yarn add aeonian
-```
-
-* Set the current environment variables to your AWS key and secret for the AWS JS SDK
-`
-###  usage
+`npm install aeonian` or `yarn add aeonian`
+* Set the current environment variables to your AWS key and secret for the [AWS JS SDK](https://aws.amazon.com/sdk-for-node-js/)
+  * `AWS_ACCESS_KEY_ID`
+  * `AWS_SECRET_ACCESS_KEY`
+  * More details on this step can be found [here](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html)
 
