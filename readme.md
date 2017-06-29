@@ -2,17 +2,14 @@
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/ae.png" alt="Aeonian Logo"/>
 </p>
 
-<p align="center">
+# æonian
+
 ![](media/automate.png)
 <span style="line-height: 128px;"> your </span>
 ![](media/s3.png)
 ![](media/plus.png)
 ![](media/cf.png)
-</p>
 
-
-
-æonian
 Get Continuous Deployment for your AWS S3 + CloudFront hosted site 
 ========
 > still in early development
