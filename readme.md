@@ -2,10 +2,10 @@
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/ae.png" alt="Aeonian Logo"/>
 </p>
 
-[![](media/automate.png)]
+![](media/automate.png)
 <span> your </span>
 ![](media/s3.png)
-![](media/cloudfront.png)
+![](media/cloudfront.png?2=2)
 
 
 
