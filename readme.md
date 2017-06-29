@@ -62,7 +62,7 @@ Which would deploy your current S3+CF setup
   * Other options on this step can be found [here](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html)
 
 ### CircleCI Integration
-This is mostly why aeonian exists, to automatically deploy based on commits.  Based on the example above, lets say you have scripts `operations/staging.js` and `operations/production.js` in your repo.  you could then have the following to your `package.json`
+This is mostly why aeonian exists, to automatically deploy based on commits.  Based on the example above, lets say you have scripts `operations/staging.js` and `operations/production.js` in your repo.  you could then add the following to your `package.json`
 ```javascript
 "scripts": {
 ..
