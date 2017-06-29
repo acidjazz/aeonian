@@ -25,7 +25,7 @@
 
 [![NPM](https://nodei.co/npm/aeonian.png)](https://nodei.co/npm/aeonian/)
 
-I've built this to help create continuous deployment for a [git-flow](http://nvie.com/posts/a-successful-git-branching-model/) model hosted on an AWS serverless setup 
+I've built this to help assist in a continuous delivery [git-flow](http://nvie.com/posts/a-successful-git-branching-model/)-styled workflow model hosted on an AWS serverless setup 
 
 ###  What does this do? 
 1. Creates a new S3 bucket `{prefix}-{commit-hash}-{environment}` based on the current repo and config
