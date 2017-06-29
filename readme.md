@@ -84,3 +84,6 @@ deployment:
       - npm run production
 ```
 Any commit/PR merge to development would deploy staging, and any commit/PR merge to master would deploy production
+
+### TravisCI Integration
+Please submit a PR or an issue once you get this running, so I can add to this area
