@@ -63,7 +63,7 @@ Which would deploy your current S3+CF setup
 
 ### CircleCI Integration
 This is mostly why aeonian exists, to automatically deploy based on commits.  Based on the example above, lets say you have scripts `operations/staging.js` and `operations/production.js` in your repo.  you could then have the following to your `package.json`
-```json
+```javascript
 "scripts": {
 ..
   "staging": "node operations/staging.js",
