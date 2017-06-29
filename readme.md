@@ -28,7 +28,8 @@
 I've built this to help supply a continuous delivery [git-flow](http://nvie.com/posts/a-successful-git-branching-model/) workflow hosted on an AWS serverless setup 
 
 ###  What does this do? 
-1. Creates a new S3 bucket `{prefix}-{commit-hash}-{environment}` based on the current repo and config
+Running `aeonian.deploy('envrionment')` will do the following:
+1. Create a new S3 bucket `{prefix}-{commit-hash}-{environment}` based on the current repo and config
 2. Upload the contents of a local directory you specified as `localDir` 
 3. Configure the newly created bucket as a static website 
 4. Change the origin of the CloudFront ID associated to point to our new bucket's website URL
