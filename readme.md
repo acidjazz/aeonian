@@ -5,7 +5,7 @@
 ![](media/automate.png)
 <span> your </span>
 ![](media/s3.png)
-![](media/cloudfront.png?2=2)
+![](media/cf.png)
 
 
 
