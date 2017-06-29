@@ -21,6 +21,7 @@
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/acidjazz/aeonian/master/license)
 [![CircleCI](https://img.shields.io/circleci/project/github/acidjazz/aeonian.svg)](https://circleci.com/gh/acidajzz/aeonian/)
 [![Join the chat at https://gitter.im/aws-aeonian/Lobby](https://badges.gitter.im/aws-aeonian/Lobby.svg)](https://gitter.im/aws-aeonian/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![NPM](https://nodei.co/npm/aeonian.png)](https://nodei.co/npm/aeonian/)
 
 I've built this to help create continuous deployment for a [git-flow](http://nvie.com/posts/a-successful-git-branching-model/) model hosted on a serverless setup 
 
@@ -64,7 +65,7 @@ Which would deploy your current S3+CF setup
   * Other options on this step can be found [here](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html)
 
 ### CircleCI Integration
-This is mostly why aeonian exists, to automatically deploy based on commits.  Based on the example above, lets say you have scripts `operations/staging.js` and `operations/production.js` in your repo.  you could then add the following to your `package.json`
+This is mostly why aeonian exists, to deploy based on commits.  Based on the example above, lets say you have scripts `operations/staging.js` and `operations/production.js` in your repo.  you could then add the following to your `package.json`
 ```javascript
 "scripts": {
 ..
