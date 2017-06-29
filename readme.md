@@ -20,8 +20,9 @@
 [![GitHub issues](https://img.shields.io/github/issues/acidjazz/aeonian.svg)](https://github.com/acidjazz/aeonian/issues)
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/acidjazz/aeonian/master/license)
 [![CircleCI](https://img.shields.io/circleci/project/github/acidjazz/aeonian.svg)](https://circleci.com/gh/acidajzz/aeonian/)
-[![NPM](https://nodei.co/npm/aeonian.png)](https://nodei.co/npm/aeonian/)
+[![Dependency Status](https://gemnasium.com/badges/github.com/acidjazz/aeonian.svg)](https://gemnasium.com/github.com/acidjazz/aeonian)
 [![Join the chat at https://gitter.im/aws-aeonian/Lobby](https://badges.gitter.im/aws-aeonian/Lobby.svg)](https://gitter.im/aws-aeonian/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![NPM](https://nodei.co/npm/aeonian.png)](https://nodei.co/npm/aeonian/)
 
 I've built this to help create continuous deployment for a [git-flow](http://nvie.com/posts/a-successful-git-branching-model/) model hosted on a serverless setup 
