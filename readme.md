@@ -12,13 +12,14 @@
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/cf.png"/>
 </p>
 
-<p align="center">Continuous Deployment for your AWS S3 + CloudFront setup</p>
+<p align="center">Continuous Deployment for your AWS S3 + CloudFront environments</p>
 
 > still in early development
 
 [![npm version](https://badge.fury.io/js/aeonian.svg)](https://badge.fury.io/js/aeonian)
 [![GitHub issues](https://img.shields.io/github/issues/acidjazz/aeonian.svg)](https://github.com/acidjazz/aeonian/issues)
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/acidjazz/aeonian/master/license)
+[![CircleCI](https://img.shields.io/circleci/project/github/acidjazz/aeonian.svg)](https://circleci.com/gh/acidajzz/aeonian/)
 
 
 ###  what does this do? 
@@ -45,13 +46,14 @@ let ae = require('aeonian').config({
 
 ae.deploy('staging')
 ```
-
 * Running this would  result in seeing
 <p align="center">
  <img src="https://github.com/acidjazz/aeonian/raw/master/demo.gif" alt="Aeonian Demo"/>
 </p>
 
 ### installation
+
+* Install the aeonian package
 ```bash
 npm install aeonian
 ```
@@ -59,5 +61,8 @@ or
 ```bash
 yarn add aeonian
 ```
+
+* Set the current environment variables to your AWS key and secret for the AWS JS SDK
+`
 ###  usage
 
