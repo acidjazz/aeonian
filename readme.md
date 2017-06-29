@@ -2,8 +2,7 @@
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/ae.png" alt="Aeonian Logo"/>
 </p>
 
-# æonian
-Continuous Deployment for your AWS S3 + CloudFront setup
+<h1 align="center"> æonian</h1>
 
 <p align="center">
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/automate.png"/>
@@ -13,7 +12,7 @@ Continuous Deployment for your AWS S3 + CloudFront setup
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/cf.png"/>
 </p>
 
-========
+Continuous Deployment for your AWS S3 + CloudFront setup
 > still in early development
 
 [![npm version](https://badge.fury.io/js/aeonian.svg)](https://badge.fury.io/js/aeonian)
