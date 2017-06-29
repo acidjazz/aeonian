@@ -22,6 +22,8 @@
 [![CircleCI](https://img.shields.io/circleci/project/github/acidjazz/aeonian.svg)](https://circleci.com/gh/acidajzz/aeonian/)
 [![Join the chat at https://gitter.im/aws-aeonian/Lobby](https://badges.gitter.im/aws-aeonian/Lobby.svg)](https://gitter.im/aws-aeonian/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+I've built this to help assist in an automated continuous deployment for a [git-flow](http://nvie.com/posts/a-successful-git-branching-model/) styled envrionment
+
 ###  What does this do? 
 1. Creates a new S3 bucket `{prefix}-{commit-hash}-{environment}` based on the current repo and config
 2. Upload the contents of a local directory you specified as `localDir` 
