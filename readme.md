@@ -23,6 +23,8 @@
 
 
 ###  what does this do? 
+
+[![Join the chat at https://gitter.im/aws-aeonian/Lobby](https://badges.gitter.im/aws-aeonian/Lobby.svg)](https://gitter.im/aws-aeonian/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 1. Creates a new S3 bucket `{prefix}-{commit-hash}-{environment}` based on the current repo and config
 2. Upload the contents of a directory you specified as `localDir` 
 3. Configure this bucket as a static website 
