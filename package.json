@@ -1,6 +1,6 @@
 {
   "name": "aeonian",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Continuous deployment to for S3->CloudFront setups",
   "main": "index.js",
   "scripts": {
