@@ -92,4 +92,4 @@ deployment:
 * Any commit/PR merge to the `master` branch would deploy the `production` environment
 
 ### TravisCI Integration
-Please submit a PR or an issue once you get this running, so I can add to this area
+Please submit a PR or an issue once you get this running, so I can update this
