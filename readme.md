@@ -22,7 +22,7 @@
 [![CircleCI](https://img.shields.io/circleci/project/github/acidjazz/aeonian.svg)](https://circleci.com/gh/acidajzz/aeonian/)
 [![Join the chat at https://gitter.im/aws-aeonian/Lobby](https://badges.gitter.im/aws-aeonian/Lobby.svg)](https://gitter.im/aws-aeonian/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-###  what does this do? 
+###  What does this do? 
 1. Creates a new S3 bucket `{prefix}-{commit-hash}-{environment}` based on the current repo and config
 2. Upload the contents of a local directory you specified as `localDir` 
 3. Configure the newly created bucket as a static website 
@@ -30,7 +30,7 @@
 5. Initiate an invalidation on `*` making the Distribution pull the new bucket's content
 6. Delete the previous bucket that was assigned as the origin as to not leave a trail of buckets
 
-### for example
+### Example
 Let's say you have a script `operations/staging.js` with the following
 ```javascript
 let ae = require('aeonian').config({
@@ -52,7 +52,7 @@ Running this would  result in
 </p>
 Which would deploy your current S3+CF setup 
 
-### installation
+### Installation
 
 * Install the aeonian package
 `npm install aeonian` or `yarn add aeonian`
