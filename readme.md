@@ -7,7 +7,7 @@ Continuous Deployment for your AWS S3 + CloudFront setup
 
 <p align="center">
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/automate.png"/>
-  <span style="line-height: 128px;"> your </span>
+  <img src="https://github.com/acidjazz/aeonian/raw/master/media/your.png"/>
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/s3.png"/>
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/plus.png"/>
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/cf.png"/>
