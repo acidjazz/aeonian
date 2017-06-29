@@ -6,7 +6,7 @@
 
 <p align="center">
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/automate.png"/>
-  <span style="line-height: 128px;"> your </span>
+  <p style="display: inline-block; line-height: 128px;"> your </p>
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/s3.png"/>
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/plus.png"/>
   <img src="https://github.com/acidjazz/aeonian/raw/master/media/cf.png"/>
