@@ -1,3 +1,5 @@
+'use strict'
+
 let cfg = {
   bucket: {
     localDir: './dist/',
