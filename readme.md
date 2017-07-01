@@ -39,7 +39,7 @@ Running `.deploy('{environment}')` will do the following:
 ### Example
 Let's say you have a script `operations/staging.js` with the following
 ```javascript
-let ae = require('aeonian').config({
+require('aeonian').config({
   bucket: {
     localDir: './dist/',
     prefix: 'mysite-'
@@ -48,15 +48,13 @@ let ae = require('aeonian').config({
     staging: 'CLOUDFRONT_ID',
     production: 'CLOUDFRONT_ID',
   }
-})
-
-ae.deploy('staging')
+}).deploy('staging')
 ```
-Running this would  result in
+Running this would result in
 <p align="center">
  <img src="https://github.com/acidjazz/aeonian/raw/master/demo.gif" alt="Aeonian Demo"/>
 </p>
-Which would deploy your current S3+CF setup 
+Which would deploy `./dist/` to your S3+CF `staging` environment
 
 ### Installation
 
