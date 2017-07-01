@@ -8,7 +8,7 @@ let cfg = {
 }
 
 const ora = require('ora')
-const spinner = ora('Loading aeonian').start()
+const spinner = ora('Loading æonian').start()
 const AWS = require('aws-sdk')
 
 var s3 = null
@@ -26,7 +26,7 @@ var environment = null
 exports.config = (cfg) => {
 
   spinner.succeed()
-  this.next('Loading Configuration')
+  this.next('Parsing configuration')
 
   this.cfg = cfg
 
@@ -57,7 +57,7 @@ exports.deploy = (environment) => {
 
   this.listBuckets((buckets) => {
     if (buckets.indexOf(bucket) !== -1) {
-      this.next('Bucket exists, removing')
+      this.next('Bucket currently exists, removing first')
       this.info()
       this.destroyBucket(bucket, () => {
         this.process(bucket, domain, environment)
@@ -74,11 +74,13 @@ exports.process = (bucket, domain, environment) => {
     this.uploadToBucket(bucket, () => {
       this.makeBucketWebsite(bucket, () => {
         this.updateCloudFrontOrigin(this.cfg.environments[environment], domain, environment, () => {
-          this.invalidate(environment, this.cfg.environments[environment], () => {
-            this.next('All operations complete')
-            this.succeed()
-            process.exit()
-          })
+          setTimeout( () => {
+            this.invalidate(environment, this.cfg.environments[environment], () => {
+              this.next('All operations complete')
+              this.succeed()
+              process.exit()
+            })
+          }, 1000)
         })
       })
     })
