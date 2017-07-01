@@ -54,6 +54,7 @@ Running this would result in
 <p align="center">
  <img src="https://github.com/acidjazz/aeonian/raw/master/demo.gif" alt="Aeonian Demo"/>
 </p>
+
 Which would deploy `./dist/` to your S3+CF `staging` environment
 
 ### Installation
