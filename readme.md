@@ -80,7 +80,7 @@ After setting your AWS credentials on CircleCi, you could add something like thi
 ```yaml
 deployment:
   staging:
-    branch: development
+    branch: staging
     commands:
       - npm run staging
   production:
@@ -88,7 +88,7 @@ deployment:
     commands:
       - npm run production
 ```
-* Any commit/PR merge to the `development` branch would deploy the `staging` environment
+* Any commit/PR merge to the `staging` branch would deploy the `staging` environment
 * Any commit/PR merge to the `master` branch would deploy the `production` environment
 
 ### TravisCI Integration
