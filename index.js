@@ -5,6 +5,14 @@ let cfg = {
     localDir: './dist/',
     prefix: null
   },
+  websiteConfiguration: {
+    IndexDocument: {
+      Suffix: 'index.html',
+    },
+    ErrorDocument: {
+      Key: 'error/index.html'
+    }
+  },
 }
 
 const ora = require('ora')
@@ -52,6 +60,8 @@ exports.deploy = (environment) => {
     this.error('Environment "' + environment + '" was not found in the config you passed')
   }
 
+  websiteConfiguration = this.cfg.websiteConfiguration;
+
   bucket = this.cfg.bucket.prefix + revision + '-' + environment
   domain = bucket + '.s3-website-us-east-1.amazonaws.com'
 
@@ -60,21 +70,21 @@ exports.deploy = (environment) => {
       this.next('Bucket currently exists, removing first')
       this.info()
       this.destroyBucket(bucket, () => {
-        this.process(bucket, domain, environment)
+        this.process(bucket, domain, environment, websiteConfiguration)
       })
     } else {
-      this.process(bucket, domain, environment)
+      this.process(bucket, domain, environment, websiteConfiguration)
     }
   })
 
 }
 
-exports.process = (bucket, domain, environment) => {
+exports.process = (bucket, domain, environment, websiteConfiguration) => {
   this.createBucket(bucket, () => {
     this.uploadToBucket(bucket, () => {
-      this.makeBucketWebsite(bucket, () => {
+      this.makeBucketWebsite(bucket, websiteConfiguration, () => {
         this.updateCloudFrontOrigin(this.cfg.environments[environment], domain, environment, () => {
-          setTimeout( () => {
+          setTimeout(() => {
             this.invalidate(environment, this.cfg.environments[environment], () => {
               this.next('All operations complete')
               this.succeed()
@@ -121,7 +131,7 @@ exports.destroyBucket = (bucket, complete) => {
 
 exports.emptyBucket = (bucket, complete) => {
   this.next('Emptying bucket: ' + bucket)
-  var deleter = client.deleteDir({Bucket: bucket})
+  var deleter = client.deleteDir({ Bucket: bucket })
   deleter.on('end', () => {
     this.succeed()
     complete()
@@ -130,7 +140,7 @@ exports.emptyBucket = (bucket, complete) => {
 
 exports.deleteBucket = (bucket, complete) => {
   this.next('Deleting bucket: ' + bucket)
-  s3.deleteBucket({Bucket: bucket}, (error, data) => {
+  s3.deleteBucket({ Bucket: bucket }, (error, data) => {
     if (error) {
       this.error('s3.deleteBucket() Error:' + error)
     } else {
@@ -142,7 +152,7 @@ exports.deleteBucket = (bucket, complete) => {
 
 exports.createBucket = (bucket, complete) => {
   this.next('Creating bucket: ' + bucket)
-  s3.createBucket({Bucket: bucket}, (error, data) => {
+  s3.createBucket({ Bucket: bucket }, (error, data) => {
     if (error) {
       this.error('s3.createbucket() Error:' + error)
     } else {
@@ -182,19 +192,12 @@ exports.uploadToBucket = (bucket, complete) => {
 
 }
 
-exports.makeBucketWebsite = (bucket, complete) => {
+exports.makeBucketWebsite = (bucket, websiteConfiguration, complete) => {
   this.next('Websiteing bucket: ' + bucket)
 
   s3.putBucketWebsite({
     Bucket: bucket,
-    WebsiteConfiguration: {
-      IndexDocument: {
-        Suffix: 'index.html',
-      },
-      ErrorDocument: {
-        Key: 'error/index.html'
-      }
-    },
+    WebsiteConfiguration: websiteConfiguration,
   }, (error, data) => {
     if (error) {
       this.error('s3.putBucketWebsite() Error: ' + error)
@@ -210,9 +213,9 @@ exports.updateCloudFrontOrigin = (id, domain, environment, complete) => {
   let updated = false
 
   this.next('Getting ' + environment + ' CloudFront Config with id: ' + id)
-  cloudfront.getDistributionConfig({Id: id}, (error, data) => {
+  cloudfront.getDistributionConfig({ Id: id }, (error, data) => {
     if (error) {
-      this.error('cf.getDistributionConfig Error ' +  error)
+      this.error('cf.getDistributionConfig Error ' + error)
     } else {
       if (updated === false) {
         updated = true
@@ -229,7 +232,7 @@ exports.updateCloudFrontOrigin = (id, domain, environment, complete) => {
         cloudfront.updateDistribution(updateParams, (terror, tdata) => {
           this.next('Updating ' + environment + ' CloudFront Origin with domain: ' + domain)
           if (terror) {
-            this.error('cf.updateDistribution Error' +  terror)
+            this.error('cf.updateDistribution Error' + terror)
           } else {
             this.succeed()
             if (current !== previous) {
