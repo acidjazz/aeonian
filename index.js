@@ -57,31 +57,31 @@ exports.deploy = (environment) => {
 
   this.listBuckets((buckets) => {
     if (buckets.indexOf(bucket) !== -1) {
-      this.next('Bucket currently exists, removing first')
+      this.next('Bucket currently exists, emptying bucket')
       this.info()
-      this.destroyBucket(bucket, () => {
+      this.emptyBucket(bucket, () => {
         this.process(bucket, domain, environment)
       })
     } else {
-      this.process(bucket, domain, environment)
+      this.createBucket(bucket, () => {
+        this.process(bucket, domain, environment)
+      })
     }
   })
 
 }
 
 exports.process = (bucket, domain, environment) => {
-  this.createBucket(bucket, () => {
-    this.uploadToBucket(bucket, () => {
-      this.makeBucketWebsite(bucket, () => {
-        this.updateCloudFrontOrigin(this.cfg.environments[environment], domain, environment, () => {
-          setTimeout( () => {
-            this.invalidate(environment, this.cfg.environments[environment], () => {
-              this.next('All operations complete')
-              this.succeed()
-              process.exit()
-            })
-          }, 1000)
-        })
+  this.uploadToBucket(bucket, () => {
+    this.makeBucketWebsite(bucket, () => {
+      this.updateCloudFrontOrigin(this.cfg.environments[environment], domain, environment, () => {
+        setTimeout( () => {
+          this.invalidate(environment, this.cfg.environments[environment], () => {
+            this.next('All operations complete')
+            this.succeed()
+            process.exit()
+          })
+        }, 1000)
       })
     })
   })
