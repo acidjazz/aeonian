@@ -1,6 +1,6 @@
 'use strict'
 
-var cfg = {
+var defaults = {
 
   bucket: {
     localDir: './dist/',
@@ -34,17 +34,17 @@ var environment = null
 exports.config = (cfg) => {
 
   spinner.succeed()
-  this.next('P4rsing configuration')
+  this.next('Parsing configuration')
 
   if (cfg.bucket) {
-    Object.assign(this.cfg.bucket, cfg.bucket);
+    Object.assign(defaults.bucket, cfg.bucket);
   }
 
   if (cfg.website) {
-    Object.assign(this.cfg.website, cfg.website);
+    Object.assign(defaults.website, cfg.website);
   }
     
-  if (this.cfg.bucke.prefix === null) {
+  if (defaults.bucket.prefix === null) {
     this.error('You need to specify a bucket prefix; bucket: { prefix: \'myproj-\' }')
   }
 
@@ -62,11 +62,11 @@ exports.config = (cfg) => {
 
 exports.deploy = (environment) => {
 
-  if (!(environment in this.cfg.environments)) {
+  if (!(environment in defaults.environments)) {
     this.error('Environment "' + environment + '" was not found in the config you passed')
   }
 
-  bucket = this.cfg.bucket.prefix + revision + '-' + environment
+  bucket = defaults.bucket.prefix + revision + '-' + environment
   domain = bucket + '.s3-website-us-east-1.amazonaws.com'
 
   this.listBuckets((buckets) => {
@@ -90,9 +90,9 @@ exports.deploy = (environment) => {
 exports.process = (bucket, domain, environment) => {
   this.uploadToBucket(bucket, () => {
     this.makeBucketWebsite(bucket, () => {
-      this.updateCloudFrontOrigin(this.cfg.environments[environment], domain, environment, () => {
+      this.updateCloudFrontOrigin(defaults.environments[environment], domain, environment, () => {
         setTimeout( () => {
-          this.invalidate(environment, this.cfg.environments[environment], () => {
+          this.invalidate(environment, defaults.environments[environment], () => {
             this.next('All operations complete')
             this.succeed()
             process.exit()
@@ -171,7 +171,7 @@ exports.createBucket = (bucket, complete) => {
 exports.uploadToBucket = (bucket, complete) => {
   this.next('00.00% Uploading to bucket: ' + bucket)
   let params = {
-    localDir: this.cfg.bucket.localDir,
+    localDir: defaults.bucket.localDir,
     deleteRemoved: true,
     s3Params: {
       Bucket: bucket,
@@ -205,10 +205,10 @@ exports.makeBucketWebsite = (bucket, complete) => {
     Bucket: bucket,
     WebsiteConfiguration: {
       IndexDocument: {
-        Suffix: cfgs.website.index,
+        Suffix: defaults.website.index,
       },
       ErrorDocument: {
-        Key: cfgs.website.error,
+        Key: defaults.website.error,
       }
     },
   }, (error, data) => {
