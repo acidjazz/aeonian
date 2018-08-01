@@ -43,6 +43,9 @@ exports.config = (cfg) => {
   if (cfg.website) {
     Object.assign(defaults.website, cfg.website);
   }
+  if (cfg.environments) {
+    Object.assign(defaults.environments, cfg.environments);
+  }
     
   if (defaults.bucket.prefix === null) {
     this.error('You need to specify a bucket prefix; bucket: { prefix: \'myproj-\' }')
