@@ -1,10 +1,18 @@
 'use strict'
 
-let cfg = {
+var cfg = {
+
   bucket: {
     localDir: './dist/',
-    prefix: null
+    prefix: null,
   },
+
+  website: {
+    index: 'index.html',
+    error: 'error/index.html',
+  },
+
+  environments: {},
 }
 
 const ora = require('ora')
@@ -26,11 +34,17 @@ var environment = null
 exports.config = (cfg) => {
 
   spinner.succeed()
-  this.next('Parsing configuration')
+  this.next('P4rsing configuration')
 
-  this.cfg = cfg
+  if (cfg.bucket) {
+    Object.assign(this.cfg.bucket, cfg.bucket);
+  }
 
-  if (this.cfg.bucket.prefix === null) {
+  if (cfg.website) {
+    Object.assign(this.cfg.website, cfg.website);
+  }
+    
+  if (this.cfg.bucke.prefix === null) {
     this.error('You need to specify a bucket prefix; bucket: { prefix: \'myproj-\' }')
   }
 
@@ -56,32 +70,34 @@ exports.deploy = (environment) => {
   domain = bucket + '.s3-website-us-east-1.amazonaws.com'
 
   this.listBuckets((buckets) => {
+
     if (buckets.indexOf(bucket) !== -1) {
-      this.next('Bucket currently exists, removing first')
+      this.next('Bucket already found, emptying')
       this.info()
-      this.destroyBucket(bucket, () => {
+      this.emptyBucket(bucket, () => {
         this.process(bucket, domain, environment)
       })
     } else {
-      this.process(bucket, domain, environment)
+      this.createBucket(bucket, () => {
+        this.process(bucket, domain, environment)
+      })
     }
+
   })
 
 }
 
 exports.process = (bucket, domain, environment) => {
-  this.createBucket(bucket, () => {
-    this.uploadToBucket(bucket, () => {
-      this.makeBucketWebsite(bucket, () => {
-        this.updateCloudFrontOrigin(this.cfg.environments[environment], domain, environment, () => {
-          setTimeout( () => {
-            this.invalidate(environment, this.cfg.environments[environment], () => {
-              this.next('All operations complete')
-              this.succeed()
-              process.exit()
-            })
-          }, 1000)
-        })
+  this.uploadToBucket(bucket, () => {
+    this.makeBucketWebsite(bucket, () => {
+      this.updateCloudFrontOrigin(this.cfg.environments[environment], domain, environment, () => {
+        setTimeout( () => {
+          this.invalidate(environment, this.cfg.environments[environment], () => {
+            this.next('All operations complete')
+            this.succeed()
+            process.exit()
+          })
+        }, 1000)
       })
     })
   })
@@ -189,10 +205,10 @@ exports.makeBucketWebsite = (bucket, complete) => {
     Bucket: bucket,
     WebsiteConfiguration: {
       IndexDocument: {
-        Suffix: 'index.html',
+        Suffix: cfgs.website.index,
       },
       ErrorDocument: {
-        Key: 'error/index.html'
+        Key: cfgs.website.error,
       }
     },
   }, (error, data) => {
@@ -212,7 +228,7 @@ exports.updateCloudFrontOrigin = (id, domain, environment, complete) => {
   this.next('Getting ' + environment + ' CloudFront Config with id: ' + id)
   cloudfront.getDistributionConfig({Id: id}, (error, data) => {
     if (error) {
-      this.error('cf.getDistributionConfig Error ' +  error)
+      this.error('cf.getDistributionConfig Error ' + error)
     } else {
       if (updated === false) {
         updated = true
@@ -229,7 +245,7 @@ exports.updateCloudFrontOrigin = (id, domain, environment, complete) => {
         cloudfront.updateDistribution(updateParams, (terror, tdata) => {
           this.next('Updating ' + environment + ' CloudFront Origin with domain: ' + domain)
           if (terror) {
-            this.error('cf.updateDistribution Error' +  terror)
+            this.error('cf.updateDistribution Error' + terror)
           } else {
             this.succeed()
             if (current !== previous) {

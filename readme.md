@@ -44,6 +44,10 @@ require('aeonian').config({
     localDir: './dist/',
     prefix: 'mysite-'
   },
+  website: {
+    index: 'index.html',
+    error: 'error/index.html',
+  },
   environments: {
     staging: 'CLOUDFRONT_ID',
     production: 'CLOUDFRONT_ID',
