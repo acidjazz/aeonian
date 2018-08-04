@@ -95,5 +95,18 @@ deployment:
 * Any commit/PR merge to the `staging` branch would deploy the `staging` environment
 * Any commit/PR merge to the `master` branch would deploy the `production` environment
 
+Please submit a PR or an issue once you get this running, so I can update this
 ### TravisCI Integration
 Please submit a PR or an issue once you get this running, so I can update this
+### Nuxt.js Integration
+This is the main reason I built this, is for my all of my [Nuxt.js](https://nuxtjs.org/)projects. I have the following commands in my `package.json` that I have CircleCI run based on environment
+
+```js
+  "scripts": {
+    ...
+    "production": "yarn cash; yarn generate; node operations/aeonian.js production",
+    "staging": "yarn cash; yarn generate; node operations/aeonian.js staging",
+    ...
+  },
+
+```
