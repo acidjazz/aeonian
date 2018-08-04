@@ -37,7 +37,7 @@ Running `.deploy('{environment}')` will do the following:
 6. Delete the previous bucket that was assigned as the origin as to not leave a trail of buckets
 
 ### Example
-Let's say you have a script `operations/staging.js` with the following
+Let's say you have a script `operations/aeonian.js` with the following
 ```javascript
 require('aeonian').config({
   bucket: {
@@ -52,9 +52,9 @@ require('aeonian').config({
     staging: 'CLOUDFRONT_ID',
     production: 'CLOUDFRONT_ID',
   }
-}).deploy('staging')
+}).deploy(process.argv[2])
 ```
-Running this would result in
+Running `node operations/aeonian.js staging` this would result in
 <p align="center">
  <img src="https://github.com/acidjazz/aeonian/raw/master/demo.gif" alt="Aeonian Demo"/>
 </p>
@@ -71,13 +71,13 @@ Which would deploy `./dist/` to your S3+CF `staging` environment
   * Other options on this step can be found [here](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html)
 
 ### CircleCI Integration
-This is mostly why aeonian exists, to deploy based on commits.  Based on the example above, lets say you have scripts `operations/staging.js` and `operations/production.js` in your repo.  you could then add the following to your `package.json`
+This is mostly why aeonian exists, to deploy based on commits.  Based on the example above, lets say you have the above script `operations/aeonian.js` in your repo.  you could then add the following to your `package.json`
 ```javascript
 "scripts": {
-..
-  "staging": "node operations/staging.js",
-  "production": "node operations/production.js",
-..
+  ...
+  "staging": "node operations/aeonian.js staging",
+  "production": "node operations/aeonian.js production",
+  ...
 },
 ```
 After setting your AWS credentials on CircleCi, you could add something like this to your `circle.yml`
@@ -98,7 +98,7 @@ deployment:
 ### Nuxt.js Integration
 The main reason I built aeonian is for my all of my [Nuxt.js](https://nuxtjs.org/) projects. I have the following commands in my `package.json` that I have CircleCI run based on environment
 
-```js
+```javascript
   "scripts": {
     ...
     "production": "yarn generate; node operations/aeonian.js production",
