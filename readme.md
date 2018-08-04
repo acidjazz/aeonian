@@ -104,8 +104,8 @@ The main reason I built aeonian is for my all of my [Nuxt.js](https://nuxtjs.org
 ```js
   "scripts": {
     ...
-    "production": "yarn cash; yarn generate; node operations/aeonian.js production",
-    "staging": "yarn cash; yarn generate; node operations/aeonian.js staging",
+    "production": "yarn generate; node operations/aeonian.js production",
+    "staging": "yarn generate; node operations/aeonian.js staging",
     ...
   },
 
