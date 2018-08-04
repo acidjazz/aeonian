@@ -99,7 +99,7 @@ Please submit a PR or an issue once you get this running, so I can update this
 ### TravisCI Integration
 Please submit a PR or an issue once you get this running, so I can update this
 ### Nuxt.js Integration
-This is the main reason I built this, is for my all of my [Nuxt.js](https://nuxtjs.org/)projects. I have the following commands in my `package.json` that I have CircleCI run based on environment
+The main reason I built aeonian is for my all of my [Nuxt.js](https://nuxtjs.org/) projects. I have the following commands in my `package.json` that I have CircleCI run based on environment
 
 ```js
   "scripts": {
