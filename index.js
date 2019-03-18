@@ -3,8 +3,10 @@
 var defaults = {
 
   bucket: {
-    localDir: './dist/',
-    prefix: null,
+    region: 'us-east-1', // region of your S3 buckets
+    localDir: './dist/', // folder to upload to the new bucket
+    prefix: null, // project prefix that will go into the bucket name with commit id
+    remove_old: true, // wether or not to delete your old bucket
   },
 
   website: {
@@ -39,7 +41,6 @@ exports.config = (cfg) => {
   if (cfg.bucket) {
     Object.assign(defaults.bucket, cfg.bucket);
   }
-
   if (cfg.website) {
     Object.assign(defaults.website, cfg.website);
   }
@@ -70,7 +71,7 @@ exports.deploy = (environment) => {
   }
 
   bucket = defaults.bucket.prefix + revision + '-' + environment
-  domain = bucket + '.s3-website-us-east-1.amazonaws.com'
+  domain = bucket + `.s3-website-${defaults.bucket.region}.amazonaws.com`
 
   this.listBuckets((buckets) => {
 
@@ -251,14 +252,17 @@ exports.updateCloudFrontOrigin = (id, domain, environment, complete) => {
             this.error('cf.updateDistribution Error' + terror)
           } else {
             this.succeed()
-            if (current !== previous) {
+            if (current !== previous && defaults.bucket.remove_old) {
               this.next('Destroying previous bucket: ' + previous)
               this.destroyBucket(previous, () => {
                 this.succeed()
                 complete()
               })
             } else {
-              this.next('Previous bucket was the same, leaving it alone')
+              if (defaults.bucket.remove_old)
+                this.next('remove_old set to false, leaving previous bucket alone')
+              else
+                this.next('Previous bucket was the same')
               this.succeed()
               complete()
             }
