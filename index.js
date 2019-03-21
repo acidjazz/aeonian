@@ -259,10 +259,10 @@ exports.updateCloudFrontOrigin = (id, domain, environment, complete) => {
                 complete()
               })
             } else {
-              if (defaults.bucket.remove_old)
-                this.next('remove_old set to false, leaving previous bucket alone')
-              else
+              if (current === previous)
                 this.next('Previous bucket was the same')
+              if (defaults.bucket.remove_old === false)
+                this.next('remove_old set to false, leaving previous bucket alone')
               this.succeed()
               complete()
             }
