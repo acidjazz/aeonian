@@ -1,6 +1,6 @@
 {
   "name": "aeonian",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "Continuous deployment to for S3->CloudFront setups",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/acidjazz/aeonian#readme",
   "dependencies": {
-    "@faceleg/s3": "^4.5.0",
+    "@faceleg/s3": "faceleg/node-s3-client#master",
     "aws-sdk": "^2.415.0",
     "ora": "^3.0.0"
   }
