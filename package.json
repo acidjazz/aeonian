@@ -17,8 +17,15 @@
   },
   "homepage": "https://github.com/acidjazz/aeonian#readme",
   "dependencies": {
-    "@faceleg/s3": "faceleg/node-s3-client#master",
     "aws-sdk": "^2.415.0",
-    "ora": "^3.0.0"
+    "fd-slicer": "^1.1.0",
+    "findit2": "^2.2.3",
+    "graceful-fs": "^4.2.0",
+    "mime": "^2.4.4",
+    "mkdirp": "^0.5.1",
+    "ora": "^3.0.0",
+    "pend": "^1.2.0",
+    "rimraf": "^2.6.3",
+    "streamsink": "^1.2.0"
   }
 }
