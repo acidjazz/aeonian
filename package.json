@@ -16,6 +16,7 @@
     "url": "https://github.com/acidjazz/aeonian/issues"
   },
   "homepage": "https://github.com/acidjazz/aeonian#readme",
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
   "dependencies": {
     "aws-sdk": "^2.415.0",
     "fd-slicer": "^1.1.0",
