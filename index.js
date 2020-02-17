@@ -109,7 +109,7 @@ exports.process = (bucket, domain, environment) => {
 
 exports.error = (message) => {
   spinner.fail(message)
-  process.exit()
+  process.exit(1)
 }
 exports.succeed = () => { spinner.succeed() }
 exports.info = () => { spinner.info() }
