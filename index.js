@@ -185,7 +185,7 @@ exports.uploadToBucket = (bucket, complete) => {
 
   let uploader = client.uploadDir(params)
   uploader.on('error', (error) => {
-    this.error('unable to sync:', error.stack)
+    this.error('unable to sync: ' + error.stack)
   })
 
   uploader.on('progress', () => {
