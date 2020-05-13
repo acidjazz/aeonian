@@ -3,8 +3,8 @@
   "version": "1.2.3",
   "description": "Continuous deployment to for S3->CloudFront setups",
   "main": "index.js",
-  "publishConfig": { 
-    "registry": " https://registry.npmjs.org/" 
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,7 +19,6 @@
     "url": "https://github.com/acidjazz/aeonian/issues"
   },
   "homepage": "https://github.com/acidjazz/aeonian#readme",
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
   "dependencies": {
     "aws-sdk": "^2.415.0",
     "fd-slicer": "^1.1.0",
